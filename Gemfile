@@ -13,8 +13,8 @@ else
   gem "activerecord"
 end
 
-gem "sqlite3-ruby"
+gem "sqlite3"
 
 group :development do
-  gem "rspec", "~>1"
+  gem "rspec", "~>2"
 end

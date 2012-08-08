@@ -1,8 +1,8 @@
 require 'active_record'
 require 'logger'
 
-RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless defined?(RAILS_ROOT)
-RAILS_ENV = 'test' unless defined?(RAILS_ENV)
+RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless defined?(Rails.root)
+RAILS_ENV = 'test' unless defined?(Rails.env)
 
 module ActsAsFu
 

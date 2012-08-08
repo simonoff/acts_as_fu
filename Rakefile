@@ -8,7 +8,7 @@ namespace :spec do
       FileUtils.rm_f "Gemfile"
       FileUtils.cp gemfile, "Gemfile"
       system("bundle install") || raise("could not bundle #{gemfile}")
-      system("bundle exec spec spec")
+      system("bundle exec rspec")
     end
   end
 end
