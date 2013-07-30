@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ActsAsFu do
-  include ActsAsFu::Base
+  include ActsAsFu
   
   def create_models
     build_model(:foos) do

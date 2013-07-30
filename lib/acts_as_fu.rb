@@ -6,5 +6,5 @@ require 'acts_as_fu/connection'
 require 'acts_as_fu/base'
 
 module ActsAsFu
-
 end
+include ActsAsFu::Base
