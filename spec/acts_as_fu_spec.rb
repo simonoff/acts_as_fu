@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require 'spec_helper'
 
 describe ActsAsFu do
-  include ActsAsFu
+  include ActsAsFu::Base
   
   def create_models
     build_model(:foos) do
@@ -111,9 +111,9 @@ describe ActsAsFu do
           string :name
           
           if ActiveRecord::VERSION::MAJOR < 3
-            named_scope :pictures, :conditions => { :type => "Picture" }
+            named_scope :pictures, -> { where(type: 'Picture') }
           else
-            scope :pictures, :conditions => { :type => "Picture" }
+            scope :pictures, -> { where(type: 'Picture') }
           end
         end
         

@@ -1,20 +1,9 @@
-source :gemcutter
+source 'https://rubygems.org'
 
-activerecord_version = ENV['ACTS_AS_FU_ACTIVERECORD_VERSION']
+gem 'activerecord', '~> 4.0.0'
 
-if activerecord_version == "edge"
-  git "https://github.com/rails/rails.git" do
-    gem "activerecord"
-    gem "activesupport"
-  end
-elsif activerecord_version && activerecord_version.strip != ""
-  gem "activerecord", activerecord_version
-else
-  gem "activerecord"
-end
-
-gem "sqlite3"
+gem 'sqlite3'
 
 group :development do
-  gem "rspec", "~>2"
+  gem 'rspec', '~> 2'
 end
