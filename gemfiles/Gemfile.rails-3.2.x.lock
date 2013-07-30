@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/devil/Works/Ruby/acts_as_fu
+  remote: ..
   specs:
     acts_as_fu (0.1)
       activerecord (>= 3.2.13, < 5)
