@@ -24,15 +24,15 @@ describe ActsAsFu do
         string :name
       end
       
-      klass.should == Person
+      expect(klass).to eq(Person)
     end
   end
   
   describe "without building a model" do
     it "asplodes" do
-      proc {
+      expect {
         Foo
-      }.should raise_error
+      }.to raise_error
     end
   end
   
@@ -42,31 +42,31 @@ describe ActsAsFu do
     end
     
     it "creates the class" do
-      proc {
+      expect {
         Foo
-      }.should_not raise_error
+      }.not_to raise_error
     end
     
     it "allows access to class" do
-      Foo.should be_awesome
+      expect(Foo).to be_awesome
     end
     
     describe "the class" do
       it "is a subclass of ActiveRecord::Base" do
-        Foo.superclass.should == ActsAsFu::Connection
+        expect(Foo.superclass).to eq(ActsAsFu::Connection)
       end
       
       it "has specified attributes" do
         foo = Foo.create! :name => "The WHIZ", :age => 100
-        foo.name.should == "The WHIZ"
-        foo.age.should == 100
+        expect(foo.name).to eq("The WHIZ")
+        expect(foo.age).to eq(100)
       end
       
       it "is really real" do
         Foo.validates_presence_of :name
-        proc {
+        expect {
           Foo.create! :age => 100
-        }.should raise_error(ActiveRecord::RecordInvalid)
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end      
     end
     
@@ -74,33 +74,33 @@ describe ActsAsFu do
       it "clears the table" do
         create_models
         5.times { Foo.create!(:name => "The WHIZ", :age => 100) }
-        Foo.count.should == 5
+        expect(Foo.count).to eq(5)
         create_models
-        Foo.count.should == 0
+        expect(Foo.count).to eq(0)
       end
       
       it "resets the class" do
         create_models
         class << Foo; attr_reader :bar end
         
-        proc { Foo.bar }.should_not raise_error
+        expect { Foo.bar }.not_to raise_error
         
         create_models
-        proc { Foo.bar }.should raise_error(NoMethodError)
+        expect { Foo.bar }.to raise_error(NoMethodError)
       end
 
       it "resets the attributes" do
         build_model :fakers do
           string :bar
         end
-        proc { Faker.new :bar => "bar" }.should_not raise_error
-        proc { Faker.new :foo => "foo" }.should     raise_error
+        expect { Faker.new :bar => "bar" }.not_to raise_error
+        expect { Faker.new :foo => "foo" }.to     raise_error
 
         build_model :fakers do
           string :foo
         end
-        proc { Faker.new :foo => "foo" }.should_not raise_error
-        proc { Faker.new :bar => "bar" }.should     raise_error
+        expect { Faker.new :foo => "foo" }.not_to raise_error
+        expect { Faker.new :bar => "bar" }.to     raise_error
       end
     end
     
@@ -119,9 +119,9 @@ describe ActsAsFu do
         
         build_model(:pictures, :superclass => Asset)
         
-        proc {
+        expect {
           Picture.create!
-        }.should change(Asset.pictures, :count)
+        }.to change(Asset.pictures, :count)
       end
     end
 
@@ -133,9 +133,9 @@ describe ActsAsFu do
           string :name
         end
 
-        proc {
+        expect {
           Foo::SubThing.create :name => "foo"
-        }.should change(Foo::SubThing, :count)
+        }.to change(Foo::SubThing, :count)
       end
     end
 
@@ -144,7 +144,7 @@ describe ActsAsFu do
   describe "ActsAsFu.report!" do
     it "has a log" do
       create_models
-      ActsAsFu::Connection.log.should include("CREATE TABLE")
+      expect(ActsAsFu::Connection.log).to include("CREATE TABLE")
     end
   end
 
@@ -165,7 +165,7 @@ describe ActsAsFu do
         string :body
       end
       
-      File.exists?(db).should be_true
+      expect(File.exists?(db)).to be_truthy
     end
     
     after(:each) do

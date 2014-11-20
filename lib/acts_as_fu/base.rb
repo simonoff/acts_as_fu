@@ -1,9 +1,14 @@
 RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless defined?(Rails.root)
-RAILS_ENV = 'test' unless defined?(Rails.env)
+RAILS_ENV  = 'test' unless defined?(Rails.env)
+if defined?(JRuby)
+  require 'activerecord-jdbcsqlite3-adapter'
+else
+  require 'sqlite3'
+end
 
 module ActsAsFu
   module Base
-    def build_model(name, options={}, &block)
+    def build_model(name, options = {}, &block)
       connect! unless connected?
 
       klass_name  = name.to_s.classify
@@ -22,7 +27,7 @@ module ActsAsFu
 
       # table_name isn't available until after the class is created.
       if super_class == ActsAsFu::Connection
-        ActsAsFu::Connection.connection.create_table(klass.table_name, :force => true) {}
+        ActsAsFu::Connection.connection.create_table(klass.table_name, force: true) {}
       end
 
       model_eval(klass, &block)
@@ -32,10 +37,15 @@ module ActsAsFu
     private
 
     def connect!
-      ActsAsFu::Connection.connect!({
-                                      :adapter  => "sqlite3",
-                                      :database => ":memory:"
-                                    })
+      adapter = if defined?(JRuby)
+                  'jdbcsqlite3'
+                else
+                  'sqlite3'
+                end
+      ActsAsFu::Connection.connect!(
+                                      adapter: adapter,
+                                      database: ':memory:'
+                                    )
       ActsAsFu::Connection.connected = true
     end
 
@@ -45,7 +55,7 @@ module ActsAsFu
 
     def model_eval(klass, &block)
       class << klass
-        def method_missing_with_columns(sym, *args, &block)
+        def method_missing_with_columns(sym, *args, &_block)
           ActsAsFu::Connection.connection.change_table(table_name) do |t|
             t.send(sym, *args)
           end
@@ -61,7 +71,5 @@ module ActsAsFu
         alias_method :method_missing, :method_missing_without_columns
       end
     end
-
   end
-
 end

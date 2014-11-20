@@ -4,10 +4,10 @@ module ActsAsFu
     cattr_reader :log
     self.abstract_class = true
 
-    def self.connect!(config={})
-      @@log       = ""
+    def self.connect!(config = {})
+      @@log = ''
       self.logger = Logger.new(StringIO.new(log))
-      self.establish_connection(config)
+      establish_connection(config)
     end
   end
 end

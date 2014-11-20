@@ -19,6 +19,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'activerecord', '>= 3.2.13', '< 5'
-  spec.add_development_dependency 'bundler', '~> 1.3'
+  spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
+  if RUBY_PLATFORM == 'java'
+    spec.add_development_dependency 'activerecord-jdbc-adapter', '~> 1.3.2'
+    spec.add_development_dependency 'activerecord-jdbcsqlite3-adapter', '~> 1.3.2'
+  else
+    spec.add_development_dependency 'sqlite3'
+  end
 end
